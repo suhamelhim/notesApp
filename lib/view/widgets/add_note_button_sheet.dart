@@ -1,41 +1,35 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:notes_app/cubits/add_note_cubit/add_note_cubit.dart';
+import 'package:notes_app/models/notes_model.dart';
 import '../../cubits/add_note_cubit/add_note_state.dart';
 import 'costum_text_field.dart';
 import 'custom_bottom.dart';
 
 class AddNoteButtonSheet extends StatelessWidget {
-  const  AddNoteButtonSheet({Key? key}) : super(key: key);
+  const AddNoteButtonSheet({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.only(right: 16, left: 16, top: 32),
-        child:
+      padding: const EdgeInsets.only(right: 16, left: 16, top: 32),
+      child: BlocConsumer<AddNoteCubit, AddNoteState>(
+        listener: (context, state) {
+          if (state is AddNoteFailure) {
 
-        SingleChildScrollView(
-            child: BlocConsumer<AddNoteCubit, AddNoteState>(
-          listener: (context, state) {
-            if (state is AddNoteFailure){
-
-            }
-            if (state is AddNoteSuccess){
-              Navigator.pop(context);
-            }
-          },
-          builder: (context, state) {
-
-            return  ModalProgressHUD(
-                inAsyncCall: state is AddNoteLoading ? true :false,
-                child: const AddNoteForm());
-          },
-        )
-
-
-    ),);
+          }
+          if (state is AddNoteSuccess) {
+            Navigator.pop(context);
+          }
+        },
+        builder: (context, state) {
+          return ModalProgressHUD(
+              inAsyncCall: state is AddNoteLoading ? true : false,
+              child: const AddNoteForm());
+        },
+      ),
+    );
   }
 }
 
@@ -67,8 +61,8 @@ class _AddNoteFormState extends State<AddNoteForm> {
             hint: 'Title',
           ),
           Padding(
-            padding: const EdgeInsets.only(
-                right: 16, left: 16, bottom: 16, top: 32),
+            padding:
+                const EdgeInsets.only(right: 16, left: 16, bottom: 16, top: 32),
             child: CustomTextField(
               onSaved: (value) {
                 subTitle = value;
@@ -81,15 +75,17 @@ class _AddNoteFormState extends State<AddNoteForm> {
             onTap: () {
               if (formKey.currentState!.validate()) {
                 formKey.currentState!.save();
+                var noteModel = NoteModel(
+                    title: title!,
+                    subtitle: subTitle!,
+                    date: DateTime.now(),
+                    color: Colors.blueGrey);
+                BlocProvider.of<AddNoteCubit>(context).addNote(noteModel);
               } else {
                 autovalidateMode = AutovalidateMode.always;
               }
-              setState(() {
-
-
-              });
+              setState(() {});
             },
-
           ),
         ],
       ),
