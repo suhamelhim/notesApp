@@ -17,6 +17,7 @@ class AddNoteButtonSheet extends StatelessWidget {
       child: BlocConsumer<AddNoteCubit, AddNoteState>(
         listener: (context, state) {
           if (state is AddNoteFailure) {
+            print('failed ${state.errorMessage}');
 
           }
           if (state is AddNoteSuccess) {
@@ -78,8 +79,8 @@ class _AddNoteFormState extends State<AddNoteForm> {
                 var noteModel = NoteModel(
                     title: title!,
                     subtitle: subTitle!,
-                    date: DateTime.now(),
-                    color: Colors.blueGrey);
+                    date: DateTime.now().toString(),
+                    color: Colors.blueGrey.value);
                 BlocProvider.of<AddNoteCubit>(context).addNote(noteModel);
               } else {
                 autovalidateMode = AutovalidateMode.always;
