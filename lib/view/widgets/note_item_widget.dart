@@ -2,9 +2,11 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class NoteItem extends StatelessWidget {
-  const NoteItem({Key? key}) : super(key: key);
+import '../../models/notes_model.dart';
 
+class NoteItem extends StatelessWidget {
+   const NoteItem({Key? key,required this.notes}) : super(key: key);
+final NoteModel notes;
   @override
   Widget build(BuildContext context) {
     return  Container(
@@ -19,27 +21,30 @@ class NoteItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             ListTile(
-              title: const Text('Flutter Tips',
-                style: TextStyle(
+              title:  Text(notes.title,
+                style: const TextStyle(
                 fontSize: 30,
                   color: Colors.black
 
               ),),
               subtitle:  Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16),
-                child: Text('Build Your Career Skills With Suha Melhim',style: TextStyle(
+                child: Text(notes.subtitle,style: TextStyle(
                   fontSize: 16,
                   color: Colors.black.withOpacity(0.5),
                 ),),
               ),
               trailing: IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  notes.delete();
+
+                },
                 icon: const Icon(FontAwesomeIcons.trash,color: Colors.black,),
               ),
             ),
              Padding(
                padding: const EdgeInsets.only(right: 16),
-               child: Text('May21 ,2022',style: TextStyle(
+               child: Text(notes.date,style: TextStyle(
     fontSize: 14,
     color: Colors.black.withOpacity(0.5),)),
              )
